@@ -1,5 +1,5 @@
 <?php
-include_once("../Utils/dotenv.php");
+require_once("../Utils/dotenv.php");
 
 $db_host = get_dotenv_value("MYSQL_DB_HOST");
 $db_user = get_dotenv_value("MYSQL_DB_USERNAME");

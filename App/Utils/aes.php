@@ -1,5 +1,5 @@
 <?php
-require("./dotenv.php");
+require_once("dotenv.php");
 
 const AES_ALGO = "aes-256-cbc";
 
