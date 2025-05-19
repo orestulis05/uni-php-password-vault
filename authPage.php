@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+$registration_message = $_SESSION["registration_message"];
+$registration_message = isset($registration_message) ? $registration_message : "";
+
+session_unset();
+session_destroy();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,6 +43,7 @@
 
     <input type="submit" value="Go">
   </form>
+  <p><b><?php echo $registration_message ?></b></p>
 </body>
 
 </html>
