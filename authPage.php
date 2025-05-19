@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-$registration_message = $_SESSION["registration_message"];
-$registration_message = isset($registration_message) ? $registration_message : "";
+$auth_message = $_SESSION["auth_message"];
+$auth_message = isset($auth_message) ? $auth_message : "";
 
 session_unset();
 session_destroy();
@@ -21,7 +21,7 @@ session_destroy();
 <body>
   <h1>Password Vault</h1>
   <h2>Login</h2>
-  <form action="" method="post">
+  <form action="App/Auth/login.php" method="POST">
     <label for="login-email">Email</label>
     <input type="email" id="login-email" name="email" required><br>
 
@@ -33,7 +33,7 @@ session_destroy();
   <h2>Register</h2>
   <form action="App/Auth/register.php" method="POST">
     <label for="name">Full Name</label>
-    <input type="text" id="name" name="name" required><br>
+    <input type="text" id="name" name="name" minlength="4" required><br>
 
     <label for="register-email">Email</label>
     <input type="email" id="register-email" name="email" required><br>
@@ -43,7 +43,7 @@ session_destroy();
 
     <input type="submit" value="Go">
   </form>
-  <p><b><?php echo $registration_message ?></b></p>
+  <p><b><?php echo $auth_message ?></b></p>
 </body>
 
 </html>
