@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register</title>
+</head>
+
+<body>
+  <h1>Password Vault</h1>
+  <h2>Login</h2>
+  <form action="" method="post">
+    <label for="login-email">Email</label>
+    <input type="email" id="login-email" name="email" required><br>
+
+    <label for="login-pwd">Password</label>
+    <input type="password" id="login-pwd" name="pwd" minlength="8" required><br>
+
+    <input type="submit" value="Go">
+  </form>
+  <h2>Register</h2>
+  <form action="App/Auth/register.php" method="post">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" required><br>
+
+    <label for="register-email">Email</label>
+    <input type="email" id="register-email" name="email" required><br>
+
+    <label for="register-pwd">Password</label>
+    <input type="password" id="register-pwd" name="pwd" minlength="8" required><br>
+
+    <input type="submit" value="Go">
+  </form>
+</body>
+
+</html>
