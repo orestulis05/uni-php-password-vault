@@ -36,8 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // TODO: redirect to main page after logging in
 
-  $_SESSION["auth_message"] = "Login success. Main page is not yet implemented.";
-  header("Location: ../../authPage.php");
+
+  $_SESSION["session_user_email"] = "$email";
+  header("Location: ../../index.php");
 }
 
 mysqli_close($db_conn);
