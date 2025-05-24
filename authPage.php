@@ -4,7 +4,12 @@ session_start();
 $auth_message = $_SESSION["auth_message"];
 $auth_message = isset($auth_message) ? $auth_message : "";
 
-// TODO: Check if session already exists -> redirect to main page.
+// Session already exists -> redirect to main page.
+$logged_in = isset($_SESSION["session_user_email"]);
+if ($logged_in) {
+  header("Location: index.php");
+  exit();
+}
 
 session_unset();
 session_destroy();

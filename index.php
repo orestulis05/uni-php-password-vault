@@ -24,7 +24,9 @@ $user_email = $_SESSION["session_user_email"];
 <body>
   <h1>Password Vault</h1>
   <h2>Welcome <?php echo $user_email ?></h2>
-
+  <form action="App/Auth/logout.php">
+    <input type="submit" value="Log out">
+  </form>
 </body>
 
 </html>
