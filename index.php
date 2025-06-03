@@ -1,19 +1,13 @@
 <?php
-session_start();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+require_once("App/Auth/authCheck.php");
 include_once("App/Core/passGen.php");
-$gen = new PasswordGenerator(4, 4, 2, 5);
-$res = $gen->generate();
 
-$logged_in = isset($_SESSION["session_user_email"]);
-if (!$logged_in) {
-  $_SESSION["auth_message"] = "Please log in.";
-  header("Location: authPage.php");
-  exit();
-}
+session_start();
+redirect_unauthorized();
 
 $user_email = $_SESSION["session_user_email"];
 
@@ -56,8 +50,6 @@ $user_email = $_SESSION["session_user_email"];
 
     <input type="submit" value="Create a new Entry">
   </form>
-
-  <h1><?php echo "$res" ?></h1>
 </body>
 
 </html>

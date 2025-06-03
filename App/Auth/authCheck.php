@@ -1,0 +1,21 @@
+<?php
+
+function redirect_unauthorized()
+{
+  $logged_in = isset($_SESSION["session_user_email"]);
+  if (!$logged_in) {
+    $_SESSION["auth_message"] = "Please log in.";
+    header("Location: authPage.php");
+    exit();
+  }
+}
+
+function redirect_authorized()
+{
+  // Session already exists -> redirect to main page.
+  $logged_in = isset($_SESSION["session_user_email"]);
+  if ($logged_in) {
+    header("Location: index.php");
+    exit();
+  }
+}

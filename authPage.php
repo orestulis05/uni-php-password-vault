@@ -1,19 +1,15 @@
 <?php
+include_once("App/Auth/authCheck.php");
+
 session_start();
 
 $auth_message = $_SESSION["auth_message"];
 $auth_message = isset($auth_message) ? $auth_message : "";
 
-// Session already exists -> redirect to main page.
-$logged_in = isset($_SESSION["session_user_email"]);
-if ($logged_in) {
-  header("Location: index.php");
-  exit();
-}
+redirect_authorized();
 
 session_unset();
 session_destroy();
-
 ?>
 
 <!DOCTYPE html>
