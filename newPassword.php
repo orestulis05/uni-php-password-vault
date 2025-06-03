@@ -27,20 +27,19 @@ $user_email = $_SESSION["session_user_email"];
 			<h2>Save a New Password</h2>
 
 			<label for="title">Name of a Website / Application:</label>
-			<input id="title" type="text" class="form-control" required>
+			<input id="title" type="text" class="form-control" required><br>
 
-			<p>Specify how much of different symbols you want in a password:</p>
 			<label for="upper">Uppercase letters: </label>
-			<input class="form-range" type="range" name="upper" id="upper" min="0" max="15"><br>
+			<input class="form-control" type="number" name="upper" id="upper" min="0" max="15"><br>
 
 			<label for="lower">Lowercase letters: </label>
-			<input class="form-range" type="range" name="lower" id="lower" min="0" max="15"><br>
+			<input class="form-control" type="number" name="lower" id="lower" min="0" max="15"><br>
 
 			<label for="numbers">Numbers: </label>
-			<input class="form-range" type="range" name="numbers" id="numbers" min="0" max="15"><br>
+			<input class="form-control" type="number" name="numbers" id="numbers" min="0" max="15"><br>
 
 			<label for="specials">Special characters: </label>
-			<input class="form-range" type="range" name="specials" id="specials" min="0" max="15"><br>
+			<input class="form-control" type="number" name="specials" id="specials" min="0" max="15"><br>
 
 			<input class="btn btn-primary" type="submit" value="Create a new Entry">
 		</form>

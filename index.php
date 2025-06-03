@@ -46,6 +46,17 @@ $user_email = $_SESSION["session_user_email"];
             <th>Actions</th>
           </tr>
         </thead>
+        <tbody>
+          <tr>
+            <td>GitHub</td>
+            <td>hdHOdf20@&#ns</td>
+            <td>2025-06-03</td>
+            <td>
+              <a href="#" class="btn btn-primary btn-sm">Edit</a>
+              <a href="#" class="btn btn-primary btn-sm">Delete</a>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
