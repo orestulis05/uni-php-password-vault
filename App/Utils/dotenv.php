@@ -1,6 +1,6 @@
 <?php
 
-define("DOTENV_FILEPATH", "../../.env");
+define("DOTENV_FILEPATH", __DIR__ . "/../../.env");
 
 function get_dotenv_value(string $key): string | false
 {

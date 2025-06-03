@@ -1,5 +1,5 @@
 <?php
-include_once("App/Auth/authCheck.php");
+include_once __DIR__ . "/App/Auth/authCheck.php";
 
 session_start();
 

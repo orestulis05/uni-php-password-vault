@@ -3,8 +3,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-require_once("App/Auth/authCheck.php");
-include_once("App/Core/passGen.php");
+require_once __DIR__ . "/App/Core/database.php";
+require_once __DIR__ . "/App/Auth/authCheck.php";
+require_once __DIR__ . "/App/Core/passGen.php";
+require_once __DIR__ . "/App/Utils/aes.php";
 
 session_start();
 redirect_unauthorized();
@@ -47,15 +49,32 @@ $user_email = $_SESSION["session_user_email"];
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>GitHub</td>
-            <td>hdHOdf20@&#ns</td>
-            <td>2025-06-03</td>
-            <td>
-              <a href="#" class="btn btn-primary btn-sm">Edit</a>
-              <a href="#" class="btn btn-primary btn-sm">Delete</a>
-            </td>
-          </tr>
+          <?php
+          $query = "SELECT email, secret, id, entry_pass, iv, title, created_at FROM entries INNER JOIN users ON entries.user_id = users.user_id WHERE email = '$user_email'";
+          $result = $db_conn->query($query);
+
+          if (!$result) {
+            die("Invalid query: " . $db_conn->error);
+          }
+
+          while ($row = $result->fetch_assoc()) {
+            $decrypter = new AESCrypt($row["secret"]);
+            $raw_password = $decrypter->decrypt($row["entry_pass"], base64_decode($row["iv"]));
+
+            echo ("
+              <tr>
+                <td>" . $row["title"] . "</td>
+                <td>$raw_password</td>
+                <td>" . $row["created_at"] . "</td>
+                <td>
+                  <a href='#' class='btn btn-primary btn-sm'>Edit</a>
+                  <a href='#' class='btn btn-primary btn-sm'>Delete</a>
+                </td>
+              </tr>
+            ");
+          }
+
+          ?>
         </tbody>
       </table>
     </div>
