@@ -1,11 +1,11 @@
 <?php
 
-function redirect_unauthorized()
+function redirect_unauthorized(string $authPagePath = "authPage.php")
 {
   $logged_in = isset($_SESSION["session_user_email"]);
   if (!$logged_in) {
     $_SESSION["auth_message"] = "Please log in.";
-    header("Location: authPage.php");
+    header("Location: $authPagePath");
     exit();
   }
 }

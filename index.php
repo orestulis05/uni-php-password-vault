@@ -1,12 +1,12 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
 
 require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
 require_once __DIR__ . "/App/Utils/aes.php";
+
+$DIR = __DIR__;
 
 session_start();
 redirect_unauthorized();
@@ -37,7 +37,7 @@ $user_email = $_SESSION["session_user_email"];
     </form>
 
     <div class="table-container">
-      <a href="newPassword.php" class="btn btn-primary" role="button">New Password Entry</a>
+      <a href="newPassword.php" class="btn btn-primary" role="button">Generate a new Password</a>
       <h2>List of Passwords</h2>
       <table class="table">
         <thead>
@@ -61,14 +61,16 @@ $user_email = $_SESSION["session_user_email"];
             $decrypter = new AESCrypt($row["secret"]);
             $raw_password = $decrypter->decrypt($row["entry_pass"], base64_decode($row["iv"]));
 
+            $id = $row["id"];
+
             echo ("
               <tr>
                 <td>" . $row["title"] . "</td>
                 <td>$raw_password</td>
                 <td>" . $row["created_at"] . "</td>
                 <td>
-                  <a href='#' class='btn btn-primary btn-sm'>Edit</a>
-                  <a href='#' class='btn btn-primary btn-sm'>Delete</a>
+                  <a href='/password-vault/App/CRUD/editEntry.php?id=$id' class='btn btn-primary btn-sm'>Edit</a>
+                  <a href='/password-vault/App/CRUD/deleteEntry.php?id=$id' class='btn btn-danger btn-sm'>Delete</a>
                 </td>
               </tr>
             ");

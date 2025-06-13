@@ -12,12 +12,12 @@ function get_dotenv_value(string $key): string | false
 
   $val = $env[$key];
   if (!is_string($val)) {
-    echo "<p>.env key <b>{$key}</b> does not exist.</p>";
+    // echo "<p>.env key <b>{$key}</b> does not exist.</p>";
     return false;
   }
 
   if (!isset($val)) {
-    echo "<p>.env key <b>{$key}</b> does not exist.</p>";
+    // echo "<p>.env key <b>{$key}</b> does not exist.</p>";
     return false;
   }
 

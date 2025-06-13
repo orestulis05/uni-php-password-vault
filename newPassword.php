@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
 
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
@@ -18,6 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$lower = $_POST["lower"];
 	$numbers = $_POST["numbers"];
 	$specials = $_POST["specials"];
+
+	// TODO: CHECK IF A PASSWORD LENGTH WILL BE > 0 
 
 	$passgen = new PasswordGenerator($upper, $lower, $numbers, $specials);
 	$raw_password = $passgen->generate();
@@ -70,20 +70,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<form action="newPassword.php" method="post">
 			<h2>Save a New Password</h2>
 
-			<label for="title">Name of a Website / Application:</label>
-			<input id="title" type="text" class="form-control" name="title" placeholder="My GitHub account" required><br>
+			<label for="title">Name of a Website / Application</label>
+			<input id="title" type="text" class="form-control" name="title" placeholder="My GitHub account" required minlength="1"><br>
 
-			<label for="upper">Uppercase letters: </label>
-			<input class="form-control" type="number" name="upper" id="upper" min="0" max="15" value="5" required><br>
+			<label for="upper">Uppercase letters </label>
+			<input class="form-control" type="number" name="upper" id="upper" min="1" max="15" value="5" required><br>
 
-			<label for="lower">Lowercase letters: </label>
-			<input class="form-control" type="number" name="lower" id="lower" min="0" max="15" value="5" required><br>
+			<label for="lower">Lowercase letters </label>
+			<input class="form-control" type="number" name="lower" id="lower" min="1" max="15" value="5" required><br>
 
-			<label for="numbers">Numbers: </label>
-			<input class="form-control" type="number" name="numbers" id="numbers" min="0" max="15" value="5" required><br>
+			<label for="numbers">Numbers </label>
+			<input class="form-control" type="number" name="numbers" id="numbers" min="1" max="15" value="5" required><br>
 
-			<label for="specials">Special characters: </label>
-			<input class="form-control" type="number" name="specials" id="specials" min="0" max="15" value="5" required><br>
+			<label for="specials">Special characters </label>
+			<input class="form-control" type="number" name="specials" id="specials" min="1" max="15" value="5" required><br>
 
 			<input class="btn btn-primary" type="submit" value="Create a new Entry">
 		</form>
