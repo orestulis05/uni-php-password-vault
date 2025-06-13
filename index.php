@@ -30,15 +30,16 @@ $user_email = $_SESSION["session_user_email"];
 
 <body>
   <div class="wrap">
-    <h1>Password Vault</h1>
-    <h2>Welcome <?php echo $user_email ?></h2>
-    <form action="App/Auth/logout.php">
+    <h1><b>Password Vault</b></h1>
+
+    <form action="App/Auth/logout.php" class="user-info-form">
+      <h2>Welcome <?php echo $user_email ?></h2>
       <input type="submit" value="Log out" class="btn btn-danger">
     </form>
 
     <div class="table-container">
+      <h2><b>List of Passwords</b></h2>
       <a href="newPassword.php" class="btn btn-primary" role="button">Generate a new Password</a>
-      <h2>List of Passwords</h2>
       <table class="table">
         <thead>
           <tr>

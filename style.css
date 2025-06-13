@@ -4,6 +4,12 @@ body {
   box-sizing: border-box;
 }
 
+.user-info-form {
+  width: 100%;
+  display: flex;
+  gap: 1em;
+}
+
 .wrap {
   padding: 2em;
 }
