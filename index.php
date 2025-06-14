@@ -1,12 +1,24 @@
 <?php
+
+// ini_set('display_errors', '1');
+// ini_set('display_startup_errors', '1');
+// error_reporting(E_ALL);
+
 require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
 require_once __DIR__ . "/App/Utils/aes.php";
 require_once __DIR__ . "/App/Models/PasswordEntry.php";
 require_once __DIR__ . "/App/Models/User.php";
+require_once __DIR__ . "/App/Utils/dotenv.php";
 
 $DIR = __DIR__;
+
+$root_folder_name = get_dotenv_value("PROJECT_ROOT_FOLDER_NAME");
+if (!$root_folder_name) {
+  echo "root folder name is not set in the .env file.";
+  exit;
+}
 
 session_start();
 redirect_unauthorized();
@@ -17,9 +29,6 @@ if (!$current_user) {
 }
 
 $password_entries = PasswordEntry::getAllUserPasswords($db_conn, $_SESSION["session_user"]);
-if (!$password_entries) {
-  exit;
-}
 
 ?>
 
@@ -76,8 +85,8 @@ if (!$password_entries) {
                 <td>" . $raw_password . "</td>
                 <td>" . $created . "</td>
                 <td>
-                  <a href='/password-vault/App/CRUD/editEntry.php?id=$id' class='btn btn-primary btn-sm'>Edit</a>
-                  <a href='/password-vault/App/CRUD/deleteEntry.php?id=$id' class='btn btn-danger btn-sm'>Delete</a>
+                  <a href='/$root_folder_name/App/CRUD/editEntry.php?id=$id' class='btn btn-primary btn-sm'>Edit</a>
+                  <a href='/$root_folder_name/App/CRUD/deleteEntry.php?id=$id' class='btn btn-danger btn-sm'>Delete</a>
                 </td>
               </tr>
             ");

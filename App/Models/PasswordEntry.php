@@ -89,9 +89,6 @@ class PasswordEntry implements IDatabaseReadable, IDatabaseSaveable
   {
     $query = "SELECT * FROM " . ENTRIES_TABLE_NAME . " WHERE user_id = $user_id";
     $results = $conn->query($query);
-    if (!$results) {
-      return false;
-    }
 
     $passwords = [];
 

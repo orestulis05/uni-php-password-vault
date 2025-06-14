@@ -3,8 +3,7 @@ include_once __DIR__ . "/App/Auth/authCheck.php";
 
 session_start();
 
-$auth_message = $_SESSION["auth_message"];
-$auth_message = isset($auth_message) ? $auth_message : "";
+$auth_message = isset($_SESSION["auth_message"]) ? $_SESSION["auth_message"] : "";
 
 redirect_authorized();
 
