@@ -51,7 +51,7 @@ if (!$password_entries) {
 
     <div class="table-container">
       <h2><b>List of Passwords</b></h2>
-      <a href="newPassword.php" class="btn btn-primary" role="button">Generate a new Password</a>
+      <a href="newPassword.php" class="btn btn-primary" role="button">New Password</a>
       <table class="table">
         <thead>
           <tr>
