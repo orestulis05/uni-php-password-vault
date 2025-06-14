@@ -45,7 +45,7 @@ $user_email = $_SESSION["session_user_email"];
           <tr>
             <th>Title</th>
             <th>Password</th>
-            <th>Created At</th>
+            <th>Created</th>
             <th>Actions</th>
           </tr>
         </thead>

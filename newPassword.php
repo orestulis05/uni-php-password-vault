@@ -47,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 
 	mysqli_close($db_conn);
-	echo "Success:)";
+	header("Location: index.php");
+	exit;
 }
 
 ?>
