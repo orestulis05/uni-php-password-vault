@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
