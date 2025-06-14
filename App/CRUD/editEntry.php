@@ -1,18 +1,24 @@
 <?php
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
 require_once __DIR__ . "/../Auth/authCheck.php";
 require_once __DIR__ . "/../Core/database.php";
 require_once __DIR__ . "/../Utils/aes.php";
+require_once __DIR__ . "/../Models/User.php";
+require_once __DIR__ . "/../Models/PasswordEntry.php";
 
 session_start();
 redirect_unauthorized("../../authPage.php");
 
-$id = -1;
-$user_secret = "";
+$current_user = User::CreateObjectFromTable($db_conn, $_SESSION["session_user"]);
+if (!$current_user) {
+  exit;
+}
 
+$id = 0;
+$user_secret = $current_user->getSecret();
 $original_title = "";
 $raw_original_password = "";
 
@@ -24,48 +30,30 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
   $id = $_GET["id"];
 
-  $query = "SELECT * FROM entries INNER JOIN users ON entries.user_id = users.user_id WHERE entries.id = $id";
-  $result = $db_conn->query($query);
-
-  if (!$result) {
-    header("Location: ../../index.php");
+  $entry = PasswordEntry::CreateObjectFromTable($db_conn, $id);
+  if (!$entry) {
     exit;
   }
 
-  $row = $result->fetch_assoc();
-
-  $original_title = $row["title"];
+  $original_title = $entry->getTitle();
 
   // Get original pass 
-  $user_secret = $row["secret"];
-  $decrypter = new AESCrypt($user_secret);
-  $raw_original_password = $decrypter->decrypt($row["entry_pass"], base64_decode($row["iv"]));
+  $decrypter = new AESCrypt($current_user->getSecret());
+  $raw_original_password = $decrypter->decrypt($entry->getEntryPass(), $entry->getIv());
 } else {
   $new_title = $_POST["new_title"];
   $new_raw_password = $_POST["new_password"];
   $id = $_POST["id"];
 
-  $query = "SELECT secret FROM entries INNER JOIN users ON entries.user_id = users.user_id WHERE entries.id = $id";
-  $result = $db_conn->query($query);
-
-  if (!$result) {
-    header("Location: ../../index.php");
+  $entry = PasswordEntry::CreateObjectFromTable($db_conn, $id);
+  if (!$entry) {
     exit;
   }
 
-  $row = $result->fetch_assoc();
+  $entry->setTitle($new_title);
+  $entry->setNewPassword($current_user->getSecret(), $new_raw_password);
 
-  // Encrypt new password
-  $aes = new AESCrypt($row["secret"]);
-  $cipher_iv = $aes->encrypt($new_raw_password);
-
-  $cipher = $cipher_iv[0];
-  $iv = base64_encode($cipher_iv[1]);
-
-  $query = "UPDATE entries SET title = '$new_title', entry_pass = '$cipher', iv = '$iv' WHERE id = $id";
-  if (!$db_conn->query($query)) {
-    exit;
-  }
+  $entry->UpdateInDB($db_conn);
 
   header("Location: ../../index.php");
   exit;

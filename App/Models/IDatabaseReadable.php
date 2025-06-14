@@ -2,5 +2,5 @@
 
 interface IDatabaseReadable
 {
-  static function CreateObjectFromTable(mysqli $conn, $id);
+  static function CreateObjectFromTable(mysqli $conn, int $id);
 }

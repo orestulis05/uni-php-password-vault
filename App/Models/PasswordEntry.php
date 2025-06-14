@@ -1,9 +1,10 @@
 <?php
 require_once __DIR__ . "/IDatabaseReadable.php";
+require_once __DIR__ . "/IDatabaseSaveable.php";
 
 const ENTRIES_TABLE_NAME = "entries";
 
-class PasswordEntry implements IDatabaseReadable
+class PasswordEntry implements IDatabaseReadable, IDatabaseSaveable
 {
   private $id = -1;
   private $user_id = -1;
@@ -52,7 +53,24 @@ class PasswordEntry implements IDatabaseReadable
     return $this->created_at;
   }
 
-  static function CreateObjectFromTable(mysqli $conn, $id)
+  public function setNewPassword($secret, $raw)
+  {
+    $aes = new AESCrypt($secret);
+    $cipher_iv = $aes->encrypt($raw);
+
+    $cipher = $cipher_iv[0];
+    $iv = $cipher_iv[1];
+
+    $this->entry_pass = $cipher;
+    $this->iv = $iv;
+  }
+
+  public function setTitle($title)
+  {
+    $this->title = $title;
+  }
+
+  static function CreateObjectFromTable(mysqli $conn, int $id)
   {
     $query = "SELECT * FROM " . ENTRIES_TABLE_NAME . " WHERE id = $id";
     $results = $conn->query($query);
@@ -61,8 +79,8 @@ class PasswordEntry implements IDatabaseReadable
     }
 
     $row = $results->fetch_assoc();
-    $original_iv = base64_decode($row["iv"]);
 
+    $original_iv = base64_decode($row["iv"]);
     $entry = new PasswordEntry($row["id"], $row["user_id"], $row["title"], $row["entry_pass"], $original_iv, $row["created_at"]);
     return $entry;
   }
@@ -85,5 +103,18 @@ class PasswordEntry implements IDatabaseReadable
     }
 
     return $passwords;
+  }
+
+  public function UpdateInDB(mysqli $conn)
+  {
+    $id = $this->id;
+    $title = $this->title;
+    $entry_pass = $this->entry_pass;
+    $iv = base64_encode($this->iv);
+
+    $query = "UPDATE " . ENTRIES_TABLE_NAME . " SET title = '$title', entry_pass = '$entry_pass', iv = '$iv' WHERE id = $id";
+    if (!$conn->query($query)) {
+      exit;
+    }
   }
 }
