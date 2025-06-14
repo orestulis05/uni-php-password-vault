@@ -4,6 +4,7 @@ require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
 require_once __DIR__ . "/App/Utils/aes.php";
+require_once __DIR__ . "/App/Models/PasswordEntry.php";
 
 $DIR = __DIR__;
 
