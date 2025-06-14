@@ -34,9 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     auth_failure("Password was incorrect.", $db_conn);
   }
 
-  // TODO: redirect to main page after logging in
-
-
   $_SESSION["session_user_email"] = "$email";
   header("Location: ../../index.php");
 }

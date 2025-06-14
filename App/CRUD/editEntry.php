@@ -41,10 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
   $decrypter = new AESCrypt($user_secret);
   $raw_original_password = $decrypter->decrypt($row["entry_pass"], base64_decode($row["iv"]));
 } else {
-  // TODO: put the page out in the base folder and make html form
-
-  // POST request is here
-
   $new_title = $_POST["new_title"];
   $new_raw_password = $_POST["new_password"];
   $id = $_POST["id"];
