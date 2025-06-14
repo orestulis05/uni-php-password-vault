@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../Core/database.php";
 require_once __DIR__ . "/../Utils/aes.php";
+require_once __DIR__ . "/../Models/User.php";
 
 session_start();
 
@@ -9,7 +10,7 @@ function auth_failure(string $message, $db_conn)
   $_SESSION["auth_message"] = "Login failed. " . $message;
   mysqli_close($db_conn);
   header("Location: ../../authPage.php");
-  exit();
+  exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,13 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   $user = $query_res->fetch_assoc();
+  $user_id = $user["user_id"];
 
   // pass guard
   if (!password_verify($pwd, $user["password"])) {
     auth_failure("Password was incorrect.", $db_conn);
   }
 
-  $_SESSION["session_user_email"] = "$email";
+  $_SESSION["session_user"] = $user_id;
   header("Location: ../../index.php");
 }
 

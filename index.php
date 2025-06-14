@@ -1,17 +1,29 @@
 <?php
 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 'On');
+
 require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
 require_once __DIR__ . "/App/Utils/aes.php";
 require_once __DIR__ . "/App/Models/PasswordEntry.php";
+require_once __DIR__ . "/App/Models/User.php";
 
 $DIR = __DIR__;
 
 session_start();
 redirect_unauthorized();
 
-$user_email = $_SESSION["session_user_email"];
+$current_user = User::CreateObjectFromTable($db_conn, $_SESSION["session_user"]);
+if (!$current_user) {
+  exit;
+}
+
+$password_entries = PasswordEntry::getAllUserPasswords($db_conn, $_SESSION["session_user"]);
+if (!$password_entries) {
+  exit;
+}
 
 ?>
 
@@ -21,7 +33,7 @@ $user_email = $_SESSION["session_user_email"];
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Password Vault - <?php echo "$user_email" ?></title>
+  <title>Password Vault - <?php echo $current_user->getEmail(); ?></title>
   <link rel="stylesheet" href="style.css">
 
   <!-- Bootstrap -->
@@ -33,7 +45,7 @@ $user_email = $_SESSION["session_user_email"];
     <h1><b>Password Vault</b></h1>
 
     <form action="App/Auth/logout.php" class="user-info-form">
-      <h2>Welcome <?php echo $user_email ?></h2>
+      <h2>Welcome <?php echo $current_user->getEmail(); ?></h2>
       <input type="submit" value="Log out" class="btn btn-danger">
     </form>
 
@@ -51,24 +63,22 @@ $user_email = $_SESSION["session_user_email"];
         </thead>
         <tbody>
           <?php
-          $query = "SELECT email, secret, id, entry_pass, iv, title, created_at FROM entries INNER JOIN users ON entries.user_id = users.user_id WHERE email = '$user_email'";
-          $result = $db_conn->query($query);
+          $decrypter = new AESCrypt($current_user->getSecret());
 
-          if (!$result) {
-            die("Invalid query: " . $db_conn->error);
-          }
+          foreach ($password_entries as $entry) {
+            $id = $entry->getId();
+            $title = $entry->getTitle();
+            $created = $entry->getCreatedAt();
 
-          while ($row = $result->fetch_assoc()) {
-            $decrypter = new AESCrypt($row["secret"]);
-            $raw_password = $decrypter->decrypt($row["entry_pass"], base64_decode($row["iv"]));
-
-            $id = $row["id"];
+            $cipher = $entry->getEntryPass();
+            $iv = $entry->getIv();
+            $raw_password = $decrypter->decrypt($cipher, $iv);
 
             echo ("
               <tr>
-                <td>" . $row["title"] . "</td>
-                <td>$raw_password</td>
-                <td>" . $row["created_at"] . "</td>
+                <td>" . $title . "</td>
+                <td>" . $raw_password . "</td>
+                <td>" . $created . "</td>
                 <td>
                   <a href='/password-vault/App/CRUD/editEntry.php?id=$id' class='btn btn-primary btn-sm'>Edit</a>
                   <a href='/password-vault/App/CRUD/deleteEntry.php?id=$id' class='btn btn-danger btn-sm'>Delete</a>
@@ -76,7 +86,6 @@ $user_email = $_SESSION["session_user_email"];
               </tr>
             ");
           }
-
           ?>
         </tbody>
       </table>

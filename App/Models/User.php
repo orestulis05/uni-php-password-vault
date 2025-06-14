@@ -1,12 +1,10 @@
 <?php
 require_once __DIR__ . "/IDatabaseReadable.php";
 
-const TABLE_NAME = "users";
+const USER_TABLE_NAME = "users";
 
 class User implements IDatabaseReadable
 {
-  static $current_user_id = -1;
-
   private $user_id = -1;
   private $email = "";
   private $password = "";
@@ -22,9 +20,34 @@ class User implements IDatabaseReadable
     $this->name = $name;
   }
 
+  public function getId()
+  {
+    return $this->user_id;
+  }
+
+  public function getEmail()
+  {
+    return $this->email;
+  }
+
+  public function getPassword()
+  {
+    return $this->password;
+  }
+
+  public function getSecret()
+  {
+    return $this->secret;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
   static function CreateObjectFromTable(mysqli $conn, $id)
   {
-    $query = "SELECT * FROM " . TABLE_NAME . " WHERE user_id = $id";
+    $query = "SELECT * FROM " . USER_TABLE_NAME . " WHERE user_id = $id";
     $results = $conn->query($query);
     if (!$results) {
       return false;
