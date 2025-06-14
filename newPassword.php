@@ -4,16 +4,20 @@ require_once __DIR__ . "/App/Auth/authCheck.php";
 require_once __DIR__ . "/App/Core/passGen.php";
 require_once __DIR__ . "/App/Core/database.php";
 require_once __DIR__ . "/App/Utils/aes.php";
+require_once __DIR__ . "/App/Models/User.php";
 
 session_start();
 redirect_unauthorized();
 
-$user_email = $_SESSION["session_user_email"];
+$current_user = User::CreateObjectFromTable($db_conn, $_SESSION["session_user"]);
+if (!$current_user) {
+	exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$title = $_POST["title"];
-	$raw_password = "someRawPassword123";
+	$raw_password = "";
 
 	$choice = $_POST["choice"]; // generated or manual
 	if ($choice === "generated") {
@@ -38,20 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 
-	$query = "SELECT user_id, secret FROM users WHERE email = '$user_email'";
-	$result = $db_conn->query($query);
-
-	if (!$result) {
-		header("Location: newPassword.php");
-		exit;
-	}
-
-	$data = $result->fetch_assoc();
-
-	$encryptor = new AESCrypt($data["secret"]);
+	$encryptor = new AESCrypt($current_user->getSecret());
 	$cipher_iv = $encryptor->encrypt($raw_password);
 
-	$user_id = $data["user_id"];
+	$user_id = $current_user->getId();
 	$cipher = $cipher_iv[0];
 	$iv = base64_encode($cipher_iv[1]);
 
